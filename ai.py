@@ -22,21 +22,24 @@ tried_list = []
 def run(data, word_list):
   guess_word = ''
   guess_list = copy.deepcopy(word_list)
-  print(data)
+  print('words in guess list ' + str(len(guess_list)))
   if len(data) == 0:
+    #crane has been mathematically determined to be the most efficient starting word in wordle
     guess_word = 'crane'
   # elif len(data) == 1:
+  #   #word with 5 remaining letters in top 10 most common letters. Might include using if word bank is larger. With smaller word banks it just reduces efficiency
   #   guess_word = 'toils'
   # tried_list.append(guess_word)
-  elif len(data) > 1:
-    guess_word = choice(guess_list)
+  # elif len(data) > 1:
+  #   guess_word = choice(guess_list)
                   
   for guess in data:
     tried_list.append(guess['word'])
 
-  for guess in tried_list:
-    if guess in guess_list:
-      guess_list.remove(guess)
+  # # redundant
+  # for guess in tried_list:
+  #   if guess in guess_list:
+  #     guess_list.remove(guess)
 
   if len(data) < 1:
     return guess_word
@@ -46,12 +49,11 @@ def run(data, word_list):
       print (word['status'])
       word_parse = list(word['word'])
       status_parse = list(word['status'])
-      for letter in word_parse:
-        if word_parse.count(letter) < 2:
-          letter_index = word_parse.index(letter, word_parse.index(letter))
-        else:
-          letter_index = word_parse.index(letter, word_parse.index(letter)+1)
-        letter_status = status_parse[letter_index]
+      i = 0
+      while i < len(word_parse):
+        letter = word_parse[i]
+        # letter_index = word_parse.index(letter, word_parse.index(letter))
+        letter_status = status_parse[i]
         # print(str(letter) + '=' + str(letter_status))
         if int(letter_status) == 0:
           print('words with ' + letter +' removed')
@@ -61,26 +63,33 @@ def run(data, word_list):
               # print(guess_list)
             # print(str(list(word)))
         elif int(letter_status) == 1:
-          print('words without ' + letter + ' or has a ' + letter + ' in position ' + str(letter_index+1) + ' removed')
+          print('words without ' + letter + ' or has a ' + letter + ' in position ' + str(i+1) + ' removed')
           for word in reversed(guess_list):
             # print(word)
             # print(list(word)[letter_index])
-            if (letter in list(word)[letter_index]) or (letter not in list(word)):
+            if (letter in list(word)[i]) or (letter not in list(word)):
               guess_list.remove(word)
         elif int(letter_status) == 2:
-          print('Words without a ' + letter + ' in position ' + str(letter_index+1) + ' removed')
+          print('Words without a ' + letter + ' in position ' + str(i+1) + ' removed')
           for word in reversed(guess_list):
-            if letter not in list(word)[letter_index]:
+            if letter not in list(word)[i]:
               guess_list.remove(word)
-
+        i += 1
+        
+  temp_list = []
+  for word in guess_list:
+    word_parse =list(word)
+    for letter in word_parse:
+      temp_list.append(letter)
+  print(temp_list)
   guess_word = choice(guess_list)
-  
-  if len(guess_list) < 50:
-    print('**************')
-    print('word remaining: ' + str(guess_list))
-    
+
   print('********************')
-  # print(rand_word)
-  # print('guess list:' + str(guess_list))
   print('tried list:' + str(tried_list))
+
+  if len(guess_list) < 20:
+    print('**************')
+    print('words remaining: ' + str(guess_list))
+    print('**************')
+    
   return guess_word
