@@ -87,9 +87,9 @@ def run(data, word_list):
 
   list_tally = collections.Counter(letter_list)
   print(list_tally)
-  most_common_letter = list_tally.most_common()[0][0]
+  most_common_letter = list_tally.most_common()
   i=0
-  # print(most_common_letter)
+  print(most_common_letter)
   for letter in most_common_letter:
     current_letter = list_tally.most_common()[i][0]
     print(current_letter)
@@ -106,7 +106,7 @@ def run(data, word_list):
         print('list has shrunk')
         print(guess_list)
         guess_word = choice(guess_list)
-        
+        break
       print('list has not shrunk')
       guess_word = choice(guess_list)
     else:
