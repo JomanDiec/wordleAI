@@ -17,6 +17,9 @@
 print_all = True
 from random import*
 import copy
+import collections
+# issubclass(Counter,dict)
+
 tried_list = []
 
 def run(data, word_list):
@@ -76,14 +79,41 @@ def run(data, word_list):
               guess_list.remove(word)
         i += 1
         
-  temp_list = []
+  letter_list = []
   for word in guess_list:
     word_parse =list(word)
     for letter in word_parse:
-      temp_list.append(letter)
-  print(temp_list)
-  guess_word = choice(guess_list)
+      letter_list.append(letter)
 
+  list_tally = collections.Counter(letter_list)
+  print(list_tally)
+  most_common_letter = list_tally.most_common()[0][0]
+  i=0
+  # print(most_common_letter)
+  for letter in most_common_letter:
+    current_letter = list_tally.most_common()[i][0]
+    print(current_letter)
+    letter_score = list_tally.most_common()[i][1]
+    print(letter_score)
+    if letter_score > 1:
+      print(guess_list)
+      list_shrunk = False
+      for word in guess_list:
+        if current_letter not in word:
+          guess_list.remove(word)
+          list_shrunk = True
+      if list_shrunk == True:
+        print('list has shrunk')
+        print(guess_list)
+        guess_word = choice(guess_list)
+        
+      print('list has not shrunk')
+      guess_word = choice(guess_list)
+    else:
+      guess_word = choice(guess_list)
+    i += 1
+
+  # guess_word = choice(guess_list)
   print('********************')
   print('tried list:' + str(tried_list))
 
